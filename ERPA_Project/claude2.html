@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pod Details</title>
+  <style>
+    * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #f3ec78, #af4261);
+  color: #fff;
+  text-align: center;
+  overflow-x: hidden;
+}
+
+header {
+  margin-bottom: 2rem;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-top: 2rem;
+  color: #fffae5;
+  text-shadow: 2px 2px #333;
+}
+
+.pods-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 1rem;
+}
+
+.pod {
+  background: #fffae5;
+  border-radius: 10px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+  padding: 1.5rem;
+  width: 250px;
+  text-align: center;
+  transition: transform 0.4s;
+}
+
+.pod:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+.pod h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.employees button {
+  display: block;
+  background-color: #af4261;
+  color: #fff;
+  border: none;
+  margin: 0.5rem 0;
+  padding: 10px 15px;
+  border-radius: 20px;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.employees button:hover {
+  background-color: #f67280;
+  transform: translateY(-3px);
+}
+
+.employee-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fffae5;
+  color: #333;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 400px;
+}
+
+.employee-popup h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.employee-popup p {
+  font-size: 1.2rem;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Pod Details</h1>
+  </header>
+
+  <section class="pods-container">
+    <!-- 6 Pods with 10 employees each -->
+    <div class="pod" id="pod-1">
+      <h2>Pod 1</h2>
+      <div class="employees">
+        <!-- 10 Employee buttons -->
+        <button onclick="showDetails('John Doe', 'Developer')">John Doe</button>
+        <button onclick="showDetails('Jane Smith', 'Designer')">Jane Smith</button>
+        <button onclick="showDetails('Mike Johnson', 'QA')">Mike Johnson</button>
+        <button onclick="showDetails('Emily Davis', 'Manager')">Emily Davis</button>
+        <button onclick="showDetails('Robert Brown', 'DevOps')">Robert Brown</button>
+        <button onclick="showDetails('Olivia Martin', 'HR')">Olivia Martin</button>
+        <button onclick="showDetails('Sophia Wilson', 'Intern')">Sophia Wilson</button>
+        <button onclick="showDetails('William Clark', 'Support')">William Clark</button>
+        <button onclick="showDetails('James Harris', 'Consultant')">James Harris</button>
+        <button onclick="showDetails('Isabella King', 'UX/UI')">Isabella King</button>
+      </div>
+    </div>
+    <!-- Repeat for Pods 2-6 -->
+  </section>
+
+  <div id="employee-details" class="employee-popup">
+    <span class="close" onclick="closePopup()">×</span>
+    <h3 id="employee-name"></h3>
+    <p id="employee-role"></p>
+  </div>
+<script>
+    function showDetails(name, role) {
+  document.getElementById("employee-name").innerText = name;
+  document.getElementById("employee-role").innerText = role;
+  document.getElementById("employee-details").style.display = "block";
+}
+
+function closePopup() {
+  document.getElementById("employee-details").style.display = "none";
+}
+
+</script>
+  
+</body>
+</html>

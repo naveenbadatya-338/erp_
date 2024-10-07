@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERPA Client Details</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --primary-blue: #0056b3;
+            --secondary-blue: #007bff;
+            --light-blue: #e6f2ff;
+            --primary-green: #28a745;
+            --light-green: #e8f5e9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: rgb(156, 213, 159);
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: var(--white);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .tab {
+            display: flex;
+            justify-content: center;
+            background-color: var(--white);
+            padding: 10px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            gap: 100px;
+            font-size: larger;
+        }
+
+        .tablinks {
+            background-color: var(--light-blue);
+            border: none;
+            color: var(--primary-blue);
+            cursor: pointer;
+            padding: 10px 20px;
+            margin: 0 5px;
+            font-size: 1.3em;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .tablinks:hover, .tablinks.active {
+            background-color: var(--primary-blue);
+            color: var(--white);
+        }
+
+        main {
+            max-width: 95%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .client-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: var(--secondary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .client-button:hover {
+            background-color: var(--primary-blue);
+        }
+
+        .client-logo {
+            display: block;
+            margin: 20px auto;
+            max-width: 200px;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .client-logo:hover {
+            transform: scale(1.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light-blue);
+        }
+
+        tr:hover {
+            background-color: var(--light-green);
+            transition: background-color 0.3s ease;
+        }
+
+        .prod-env {
+            background-color: var(--light-green);
+        }
+
+        .non-prod-env {
+            background-color: var(--light-blue);
+        }
+
+        ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--primary-green);
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .client-details {
+            animation: fadeIn 0.5s ease-out;
+            display: none;
+            font-size: large;
+            font-weight: bold;
+        }
+
+        h2 {
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--primary-green);
+            padding-bottom: 10px;
+        }
+
+        /* New Styles for Time Zone and Current Time */
+        .time-info {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #555;
+            text-align: center;
+        }
+
+        .time-info span {
+            font-weight: normal;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+ 
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+        }
+ 
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            font-size: 2.5em;
+        }
+ 
+        .pod {
+            padding: 15px;
+            background-color: #1abc9c;
+            color: white;
+            margin: 20px 0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 1.5em;
+            transition: background-color 0.3s ease;
+        }
+ 
+        .pod:hover {
+            background-color: #16a085;
+        }
+ 
+        .members {
+            display: none;
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+ 
+        .member-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+ 
+        .member-container:hover {
+            transform: scale(1.01);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+ 
+        .member {
+            cursor: pointer;
+            color: #2980b9;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+ 
+        .member:hover {
+            color: #3498db;
+        }
+ 
+        .details {
+            background-color: #bdc3c7;
+            padding: 10px;
+            border-radius: 8px;
+            margin-left: 20px;
+            flex-grow: 1;
+            display: none;
+            color: #2c3e50;
+        }
+ 
+        .details div {
+            margin: 5px 0;
+        }
+ 
+        .client-link {
+            color: #e74c3c;
+            cursor: pointer;
+            text-decoration: none;
+        }
+ 
+        .client-link:hover {
+            text-decoration: underline;
+        }
+        /* Dropdown Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--white);
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: var(--primary-blue);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--light-blue);
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .inventory-selected {
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        function showClientDetails(clientName) {
+            const clientDetails = document.getElementsByClassName("client-details");
+            for (let i = 0; i < clientDetails.length; i++) {
+                clientDetails[i].style.display = "none";
+            }
+            document.getElementById(clientName + "Details").style.display = "block";
+        }
+
+        window.onload = function() {
+            document.getElementById("defaultOpen").click();
+            initializeClocks();
+        }
+
+        function showPodMembers(podId) {
+            const membersDiv = document.getElementById(podId + '-members');
+            const otherPodMembers = document.querySelectorAll('.members');
+            otherPodMembers.forEach(pod => {
+                if (pod !== membersDiv) {
+                    pod.style.display = 'none';
+                }
+            });
+            membersDiv.style.display = (membersDiv.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function showMemberDetails(event, memberId) {
+            event.stopPropagation();
+            const memberDetailsDiv = document.getElementById(memberId + '-details');
+            const otherMemberDetails = document.querySelectorAll('.details');
+            otherMemberDetails.forEach(detail => {
+                if (detail !== memberDetailsDiv) {
+                    detail.style.display = 'none';
+                }
+            });
+            memberDetailsDiv.style.display = (memberDetailsDiv.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // Function to initialize clocks for each client
+        function initializeClocks() {
+            updateClocks(); // Initial call
+            setInterval(updateClocks, 1000); // Update every second
+        }
+
+        // Function to update all clocks
+        function updateClocks() {
+    const clients = document.querySelectorAll('.client-details');
+    clients.forEach(client => {
+        const currentTimeElement = client.querySelector('.current-time');
+        if (currentTimeElement) {
+            const now = new Date();
+            // Convert to IST (UTC+5:30)
+            const istOffset = 5.5 * 60 * 60 * 1000; // 5 hours 30 minutes in milliseconds
+            const istTime = new Date(now.getTime() + istOffset);
+            
+            const hours = istTime.getUTCHours().toString().padStart(2, '0');
+            const minutes = istTime.getUTCMinutes().toString().padStart(2, '0');
+            const seconds = istTime.getUTCSeconds().toString().padStart(2, '0');
+            
+            currentTimeElement.textContent = `${hours}:${minutes}:${seconds}`;
+        }
+    });
+}
+
+    </script>
+</head>
+<body>
+    <header style="display: flex; align-items: center; justify-content: space-between;">
+        <img src="/images/ERPA-Logo-White.webp" style="height: 100px;">
+        <h1 style="flex-grow: 1; text-align: center;">ERPA Client Details</h1>
+    </header>
+    
+    
+    <div class="tab">
+        
+        <button class="tablinks" onclick="openTab(event, 'Clients')" id="defaultOpen">Clients</button>
+        <div class="dropdown">
+            <button class="tablinks">Inventory</button>
+            <div class="dropdown-content">
+                <a href="#" onclick="openTab(event, 'FSCJ_Inventory')">FSCJ</a>
+                <a href="#" onclick="openTab(event, 'ALASU_Inventory')">ALASU</a>
+            </div>
+        </div>
+        <button class="tablinks" onclick="openTab(event, 'pod')">Pod Info</button>
+        <button class="tablinks" onclick="openTab(event,'tab3')">Tab 3</button>
+    </div>
+    <main>
+        <div id="Clients" class="tabcontent">
+            <button class="client-button" onclick="showClientDetails('fscj')">Florida State College at Jacksonville (FSCJ)</button>
+            <button class="client-button" onclick="showClientDetails('alasu')">Alabama State University (ALASU)</button>
+
+            <div id="fscjDetails" class="client-details" style="font-weight: bold; font-size: large;">
+                <h2>Florida State College at Jacksonville (FSCJ)</h2>
+                <img src="/images/fscj.png" alt="FSCJ Logo" class="client-logo">
+                <!-- Added Time Zone and Current Time -->
+                <div class="time-info">
+                    <strong>Time Zone:</strong> <span>Indian Standard Time (IST)</span><br>
+                    <strong>Current Time:</strong> <span class="current-time">--:--:--</span>
+                </div>
+                <table>
+                  <tr>
+                    <th>Applications</th>
+                    <th>Image Level</th>
+                    <th>Tools Version</th>
+                    <th>Application URL</th>
+                    <th colspan="2">Environments</th>
+                  </tr>
+                  <tr>
+                    <td>FSCM</td>
+                    <td>49</td>
+                    <td>8.60.11</td>
+                    <td><a href="http://fscm.domain.com:8000" target="_blank">http://fscm.domain.com:8000</a></td>
+                    <td class="prod-env">
+                      <ul>
+                        <li>fsprd</li>
+                      </ul>
+                    </td>
+                    <td class="non-prod-env">
+                      <ul>
+                        <li>fsdmo</li>
+                        <li>fsdev1</li>
+                        <li>fsQA1</li>
+                        <li>fsTRN</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>HCM</td>
+                    <td>49</td>
+                    <td>8.60.11</td>
+                    <td><a href="http://hcm.domain.com:8000" target="_blank">http://hcm.domain.com:8000</a></td>
+                    <td class="prod-env">
+                      <ul>
+                        <li>hcprd</li>
+                      </ul>
+                    </td>
+                    <td class="non-prod-env">
+                      <ul>
+                        <li>hcdmo</li>
+                        <li>hcdev1</li>
+                        <li>hcQA1</li>
+                        <li>hcQA2</li>
+                        <li>hcTRN</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>CS</td>
+                    <td>32</td>
+                    <td>8.60.11</td>
+                    <td><a href="http://cs.domain.com:8000" target="_blank">http://cs.domain.com:8000</a></td>
+                    <td class="prod-env">
+                      <ul>
+                        <li>csprd</li>
+                      </ul>
+                    </td>
+                    <td class="non-prod-env">
+                      <ul>
+                        <li>csdmo</li>
+                        <li>csdev1</li>
+                        <li>csQA1</li>
+                        <li>csQA2</li>
+                        <li>csTRN</li>
+                      </ul>
+                    </td>
+                  </tr>
+                </table>
+            </div>
+            <div id="alasuDetails" class="client-details">
+                <h2>Alabama State University (ALASU)</h2>
+                <img src="/images/alasu.png" alt="ALASU Logo" class="client-logo">
+                <!-- Added Time Zone and Current Time -->
+                <div class="time-info">
+                    <strong>Time Zone:</strong> <span>Indian Standard Time (IST)</span><br>
+                    <strong>Current Time:</strong> <span class="current-time">--:--:--</span>
+                </div>
+                <table>
+                  <tr>
+                    <th>Applications</th>
+                    <th>Image Level</th>
+                    <th>Tools Version</th>
+                    <th>Application URL</th>
+                    <th colspan="2">Environments</th>
+                  </tr>
+                  <tr>
+                    <td>FSCM</td>
+                    <td>51</td>
+                    <td>8.59.18</td>
+                    <td><a href="http://fscm.alasu.domain.com:8000" target="_blank">http://fscm.alasu.domain.com:8000</a></td>
+                    <td class="prod-env">
+                      <ul>
+                        <li>fsprod</li>
+                      </ul>
+                    </td>
+                    <td class="non-prod-env">
+                      <ul>
+                        <li>fsdmo</li>
+                        <li>fsdev</li>
+                        <li>fstest</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>HCM</td>
+                    <td>47</td>
+                    <td>8.59.18</td><td><a href="http://hcm.alasu.domain.com:8000" target="_blank">http://hcm.alasu.domain.com:8000</a></td>
+                    <td class="prod-env">
+                      <ul>
+                        <li>hcprod</li>
+                      </ul>
+                    </td>
+                    <td class="non-prod-env">
+                      <ul>
+                        <li>hcdmo</li>
+                        <li>hcdev</li>
+                        <li>hctest</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>CS</td>
+                    <td>32</td>
+                    <td>8.59.18</td>
+                    <td><a href="http://cs.alasu.domain.com:8000" target="_blank">http://cs.alasu.domain.com:8000</a></td>
+                    <td class="prod-env">
+                      <ul>
+                        <li>csprod</li>
+                      </ul>
+                    </td>
+                    <td class="non-prod-env">
+                      <ul>
+                        <li>csdmo</li>
+                        <li>csdev</li>
+                        <li>cstest</li>
+                      </ul>
+                    </td>
+                  </tr>
+                </table>
+                
+                
+            </div>
+        </div>
+
+        <div id="pod" class="tabcontent">
+          <h1 style="color: #0056b3;">Pod Details</h1>
+   
+          <div class="pod" onclick="showPodMembers('pod1')">Pod 1</div>
+          <div id="pod1-members" class="members">
+              <div class="member-container" onclick="showMemberDetails(event, 'member1')">
+                  <div class="member">Member 1</div>
+                  <div id="member1-details" class="details">
+                      <div><strong>Name:</strong> John Doe</div>
+                      <div><strong>Age:</strong> 30</div>
+                      <div><strong>Phone Number:</strong> (123) 456-7890</div>
+                      <div><strong>Client:</strong> <a href="client-acme.html" class="client-link">Acme Corp</a></div>
+                      <div><strong>City:</strong> New York</div>
+                      <div><strong>Pincode:</strong> 10001</div>
+                  </div>
+              </div>
+              <div class="member-container" onclick="showMemberDetails(event, 'member2')">
+                  <div class="member">Member 2</div>
+                  <div id="member2-details" class="details">
+                      <div><strong>Name:</strong> Jane Smith</div>
+                      <div><strong>Age:</strong> 28</div>
+                      <div><strong>Phone Number:</strong> (987) 654-3210</div>
+                      <div><strong>Client:</strong> <a href="client-xyz.html" class="client-link">XYZ Ltd</a></div>
+                      <div><strong>City:</strong> Los Angeles</div>
+                      <div><strong>Pincode:</strong> 90001</div>
+                  </div>
+              </div>
+          </div>
+       
+          <div class="pod" onclick="showPodMembers('pod2')">Pod 2</div>
+          <div id="pod2-members" class="members">
+              <div class="member-container" onclick="showMemberDetails(event, 'member3')">
+                  <div class="member">Member 3</div>
+                  <div id="member3-details" class="details">
+                      <div><strong>Name:</strong> Alex Johnson</div>
+                      <div><strong>Age:</strong> 35</div>
+                      <div><strong>Phone Number:</strong> (555) 123-4567</div>
+                      <div><strong>Client:</strong> <a href="client-abc.html" class="client-link">ABC Inc</a></div>
+                      <div><strong>City:</strong> Chicago</div>
+                      <div><strong>Pincode:</strong> 60601</div>
+                  </div>
+              </div>
+              <div class="member-container" onclick="showMemberDetails(event, 'member4')">
+                  <div class="member">Member 4</div>
+                  <div id="member4-details" class="details">
+                      <div><strong>Name:</strong> Emily Davis</div>
+                      <div><strong>Age:</strong> 32</div>
+                      <div><strong>Phone Number:</strong> (444) 987-6543</div>
+                      <div><strong>Client:</strong> <a href="client-global.html" class="client-link">Global Solutions</a></div>
+                      <div><strong>City:</strong> San Francisco</div>
+                      <div><strong>Pincode:</strong> 94101</div>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+        <div id="tab3" class="tabcontent">
+            <h2>Tab 3 Content</h2>
+            <p>This is the content for Tab 3. You can add your desired content here.</p>
+        </div>
+        <div id="inventory" class="tabcontent">
+            <h2>Inventory related tab</h2>
+            <p>tab related to inventory</p>
+        </div>
+    </main>
+</body>
+</html>

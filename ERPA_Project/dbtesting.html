@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- CSS for darkmode toggle button -->
+    <link rel="stylesheet" href="darkmode.css">
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js" type="module"></script>
+    <!-- CSS for styles -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Navbar */
+        .navbar {
+            background-color:  #5c99bffd;
+            padding: 1rem;
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar h2 {
+            margin: 0;
+        }
+
+        .navbar nav a:hover {
+            color: #cce0ff;
+        }
+        
+        /* Quick Links */
+    .quick-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        position: sticky;
+        top: 70px; /* height of navbar */
+        background-color: #ffffff;
+        padding: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 100; /* below navbar */
+        background-color: rgba(255, 255, 255, 0.974);
+
+    }
+        
+        .quick-links a {
+            margin: 0 10px;
+            color: #662d13;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease-in-out;
+        }
+        
+        /* Main Content */
+        .container {
+            padding: 2rem;
+        }
+        
+        .section-header {
+            margin-bottom: 1.5rem;
+            color: #003366;
+            font-weight: 600;
+        }
+        
+        /* Card Style */
+        .card {
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.6s forwards;   
+            border: 1.5px solid rgb(0, 0, 0);
+        }
+        
+        .card:hover {
+            transform: translateY(-85px);
+            box-shadow: 0 10px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Background Colors for Cards */
+        .card.servers { background-color: #e0f7fa; }
+        .card.employees { background-color: #fff3e0; }
+        .card.maintenance { background-color: #f0f0f0; }
+        .card.vpn { background-color: #ccffcc; }
+        .card.aws{ background-color: rgb(98,189,235);}
+        .card h3 {
+            margin-top: 0;
+        }
+        .card.maintenance{
+            background-image: url(/images/maintenance.png);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: right;
+            background-color: #f2fcf2;
+        }
+        .card.aws{
+            background-image: url(/images/shared\ image.jfif);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            .btn{
+                background-color: rgb(222, 194, 116);
+                border: 1px solid black;
+                text-decoration: none;
+                color: black;
+            }
+            
+        }
+        .card.servers {
+            /* background-image: url(/images/aws.png.jfif); */
+            background-image: url(/images/SERVERS.jfif);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: right;
+            background-color: rgb(173,217,252);
+            color: #cce0ff;
+            /* h3{
+                color: #f7b054; 
+            } */
+            .btn{
+                background-color: #b8cae5;
+                color: #000000;
+                font-size: larger;
+                border: 1px solid black;
+            }
+            .btn:hover{
+                background-color: #f7b054;
+                /* background-color: rgb(36,42,100); color: #ddd; */
+            }
+            p{
+                color: black;
+            }
+            th{
+                position: sticky;
+                color: #ffffff;
+                background-color: #3109e4f0;
+            }
+            td{
+                color:#20180f;
+                background-color: rgba(242, 250, 250, 0.608);
+            }
+            
+            
+        }
+        .card.servers:hover{
+                transform: translateY(-5px);
+            }
+        .card.employees{
+            background-image: url(https://kloverharris.com/wp-content/uploads/2022/04/Image-Insperity.png);
+            /* background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTksnMvD_g1TCP7iMr2SfXIVH1UvRCEdzsODA&s); */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: right;
+            background-color: rgb(222,217,201);
+            .btn{
+                font-size: larger;
+                border: 1px solid black;
+                background-color: rgb(88, 206, 219);
+                color: #000000;
+            }
+        }
+        .card.vpn{
+            background-image: url(/images/vpn_png.png);
+            background-position: right;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-color: #d3eeec;
+
+        }       
+        
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+            background-color: rgba(255, 255, 255, 0.796);
+            
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #1f6ebecf;
+            color: #ffffff;
+        }
+        
+        /* Button styles */
+        .btn {
+            padding: 10px 20px;
+            color: white;
+            background-color: #003366;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #002244;
+            transform: scale(1.05);
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Slide-in animation */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hover Effects */
+        .card:hover {
+            box-shadow: 0 10px 16px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .btn:hover {
+            background-color: #002244;
+            transform: scale(1.05);
+        }
+
+        .quick-links a:hover {
+            color: #cce0ff;
+        }
+
+        .navbar nav a:hover {
+            color: #cce0ff;
+            
+        }
+       html{
+        scroll-behavior: smooth;
+        scroll-padding-top: 150px; /* Adjust this value based on the combined height of navbar and quick links */
+
+       } 
+
+       /* Add this to your existing CSS */
+.highlight {
+    box-shadow: 0 0 15px 5px rgba(0, 128, 255, 0.5), 0 0 10px rgba(255, 0, 128, 0.3);
+    transition: box-shadow 0.5s ease-in-out;
+}
+
+    </style>
+<style>
+    .server-details {
+        max-height:  0; /* Collapsed state */
+        overflow: hidden; /* Hide overflow */
+        transition: max-height 0.5s ease-in-out; /* Smooth transition */
+        background-color: transparent;
+    }
+
+    .server-details.active {
+        max-height: 400px; /* Adjust to a suitable maximum height */
+    }
+    .table-container {
+    height: 200px; /* Set your desired height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    scrollbar-width: none;
+    border-radius: 12px;
+    /* border: 1px solid #ffffff; Optional: Add a border for clarity */
+}
+
+
+
+</style>
+<style>
+    /* ... (previous styles remain unchanged) ... */
+
+    /* Add this to your existing CSS */
+    .employee-details {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-in-out;
+        background-color: transparent;
+    }
+
+    .employee-details.active {
+        max-height: 500px;
+    }
+
+    .employee-table-container {
+        height: 200px;
+        overflow-y: auto;
+        scrollbar-width: none;
+        border-radius: 12px;
+    }
+</style>
+
+<style>
+    .flex-div {
+  display: flex;
+  align-items: center;
+}
+
+.flex-div h3, .flex-div p {
+  margin: 0;
+  padding-right: 100px; /* Optional spacing */
+}
+
+</style>
+    
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <h2>Inventory Management Dashboard</h2>
+        <nav>
+            <!-- button for darkmode toggle  -->
+            <label class="switch">
+              <span class="sun"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="#ffd43b"><circle r="5" cy="12" cx="12"></circle><path d="m21 13h-1a1 1 0 0 1 0-2h1a1 1 0 0 1 0 2zm-17 0h-1a1 1 0 0 1 0-2h1a1 1 0 0 1 0 2zm13.66-5.66a1 1 0 0 1 -.66-.29 1 1 0 0 1 0-1.41l.71-.71a1 1 0 1 1 1.41 1.41l-.71.71a1 1 0 0 1 -.75.29zm-12.02 12.02a1 1 0 0 1 -.71-.29 1 1 0 0 1 0-1.41l.71-.66a1 1 0 0 1 1.41 1.41l-.71.71a1 1 0 0 1 -.7.24zm6.36-14.36a1 1 0 0 1 -1-1v-1a1 1 0 0 1 2 0v1a1 1 0 0 1 -1 1zm0 17a1 1 0 0 1 -1-1v-1a1 1 0 0 1 2 0v1a1 1 0 0 1 -1 1zm-5.66-14.66a1 1 0 0 1 -.7-.29l-.71-.71a1 1 0 0 1 1.41-1.41l.71.71a1 1 0 0 1 0 1.41 1 1 0 0 1 -.71.29zm12.02 12.02a1 1 0 0 1 -.7-.29l-.66-.71a1 1 0 0 1 1.36-1.36l.71.71a1 1 0 0 1 0 1.41 1 1 0 0 1 -.71.24z"></path></g></svg></span>
+              <span class="moon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="m223.5 32c-123.5 0-223.5 100.3-223.5 224s100 224 223.5 224c60.6 0 115.5-24.2 155.8-63.4 5-4.9 6.3-12.5  3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6-96.9 0-175.5-78.8-175.5-176 0-65.8 36-123.1 89.3-153.3 6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"></path></svg></span>   
+              <input type="checkbox" class="input">
+              <span class="slider"></span>
+            </label>
+        </nav>
+        
+    </div>
+
+    <!-- Quick Links -->
+<div class="quick-links">
+    <a href="#maintenance-window" onclick="highlightCard('maintenance-window')">Maintenance Window</a>
+    <a href="#vpn-details" onclick="highlightCard('vpn-details')">VPN Details</a>
+    <a href="#aws-console-link" onclick="highlightCard('aws-console-link')">AWS Console Link</a>
+    <a href="#number-of-servers" onclick="highlightCard('number-of-servers')">Number of Servers</a>
+    <a href="#employees-section" onclick="highlightCard('employees-section')">Employees</a>
+</div>
+
+    
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Maintenance Window -->
+        <div class="card maintenance" id="maintenance-window">
+            <h3 class="section-header">Maintenance Window</h3>
+            <p>Scheduled maintenance windows for different servers:</p>
+            <table>
+                <tr>
+                    <th>Server Name</th>
+                    <th>Maintenance Start</th>
+                    <th>Maintenance End</th>
+                </tr>
+                <tr>
+                    <td>Server A</td>
+                    <td>2024-09-30 01:00 AM</td>
+                    <td>2024-09-30 03:00 AM</td>
+                </tr>
+                <tr>
+                    <td>Server B</td>
+                    <td>2024-10-05 11:00 PM</td>
+                    <td>2024-10-06 01:00 AM</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- VPN Details -->
+        <div class="card vpn" id="vpn-details">
+            <h3 class="section-header">VPN Details</h3>
+            <p>Client VPN Information:</p>
+            <!-- <table>
+                <tr>
+                    <th>VPN Provider</th>
+                    <th>Download Link</th>
+                </tr>
+                <tr>
+                    <td>ExpressVPN</td>
+                    <td><a href="https://www.expressvpn.com/download" target="_blank">Download</a></td>
+                </tr>
+            </table> -->
+            <div class="flex-div">
+                <h3>VPN Provider</h3>
+                <p>Provider Name</p><p>Download link</p>
+              </div>
+              
+        </div>
+
+        <!-- AWS Console Link -->
+        <div class="card aws" id="aws-console-link" >
+            <h3 class="section-header">AWS Console Link</h3>
+            <p>Client AWS Console Access:</p>
+            <a href="https://console.aws.amazon.com/" target="_blank" class="btn">Access AWS Console</a>
+        </div>
+<!-- Servers Section -->
+<div class="card servers" id="number-of-servers">
+    <h3 class="section-header">Servers</h3>
+    <p>Click below to view server details:</p>
+    <button class="btn" id="toggle-servers" onclick="toggleServerDetails()">View Servers</button>
+    <!-- Server details will be shown in modal -->
+    <div id="server-details" class="server-details">
+        <h3></h3>
+        <div class="table-container">
+        <table>
+            <tr>
+                <th>Server Name</th>
+                <th>Server Status</th>
+            </tr>
+            <tr>
+                <td>Server A</td>
+                <td>Running</td>
+            </tr>
+            <tr>
+                <td>Server B</td>
+                <td>Down</td>
+            </tr>
+            <tr>
+                <td>Server C</td>
+                <td>Running</td>
+            </tr>
+            <tr>
+                <td>Server A</td>
+                <td>Running</td>
+            </tr>
+            <tr>
+                <td>Server B</td>
+                <td>Down </td>
+            </tr>
+            <tr>
+                <td>Server C</td>
+                <td>Running</td>
+            </tr>
+            <tr>
+                <td>Server A</td>
+                <td>Running</td>
+            </tr>
+            <tr>
+                <td>Server B</td>
+                <td>Down</td>
+            </tr>
+            <tr>
+                <td>Server C</td>
+                <td>Running</td>
+            </tr>
+        </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- Employees Card -->
+<div class="card employees" id="employees-section">
+    <h3 class="section-header">Employees</h3>
+    <p>Click to view details of employees based on their role:</p>
+    <button class="btn" onclick="toggleEmployeeDetails('admin')">PS Admin</button>
+    <button class="btn" onclick="toggleEmployeeDetails('developer')">PS Developer</button>
+    <button class="btn" onclick="toggleEmployeeDetails('dbadmin')">DB Administrator</button>
+    <button class="btn" onclick="toggleEmployeeDetails('awsengineer')">AWS Cloud Engineer</button>
+    <!-- <button class="btn" id="closeEmployee" onclick="closeEmployeeDetails()" style="display: none;">Hide</button> -->
+
+    
+    <!-- Employee details will be shown here -->
+    <div id="employee-details" class="employee-details">
+        <h3 id="employee-role-title"></h3>
+        <span style="cursor:pointer;margin-bottom: 10px; background-color: #00000061; text-align: center;  font-size: larger; color: whitesmoke; font-weight: bold; padding: 0px 15px 0px 15px; " onclick="closeEmployeeDetails()">Hide employee details</span>
+
+        <div class="employee-table-container">
+            <table id="employee-table">
+                <!-- Employee details will be dynamically added here -->
+            </table>
+            
+        </div>
+    </div>
+</div>
+    </div>
+    <!-- JS for Modals and Dynamic Content -->
+    <script>
+        // Function to highlight the card
+function highlightCard(cardId) {
+    // Remove 'highlight' from all cards first
+    document.querySelectorAll('.card').forEach(card => {
+        card.classList.remove('highlight');
+    });
+
+    // Add 'highlight' to the clicked card
+    const card = document.getElementById(cardId);
+    if (card) {
+        card.classList.add('highlight');
+
+        // Remove the highlight after 3 seconds
+        setTimeout(() => {
+            card.classList.remove('highlight');
+        }, 2000);
+    }
+}
+    </script>
+
+<script>
+function toggleServerDetails() {
+    const serverDetails = document.getElementById("server-details");
+    const toggleButton = document.getElementById("toggle-servers");
+
+    // Check if details are currently visible
+    if (serverDetails.classList.contains("active")) {
+        serverDetails.classList.remove("active"); // Remove active class to collapse
+        toggleButton.textContent = "View Servers"; // Change button text
+    } else {
+        serverDetails.classList.add("active"); // Add active class to expand
+        toggleButton.textContent = "Hide Servers"; // Change button text
+    }
+}
+
+</script>
+
+
+<script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBPPkzDt3cY3DT-sodGvu7uZy_is0GzrZc",
+        authDomain: "erp-employees-84883.firebaseapp.com",
+        databaseURL: "https://erp-employees-84883-default-rtdb.firebaseio.com",
+        projectId: "erp-employees-84883",
+        storageBucket: "erp-employees-84883.appspot.com",
+        messagingSenderId: "1076821963095",
+        appId: "1:1076821963095:web:8ae8d1f6ae4ba388894e12",
+        measurementId: "G-DK1B84SPWM"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    // Updated function to toggle employee details based on role
+    function toggleEmployeeDetails(role) {
+        const employeeDetails = document.getElementById('employee-details');
+        const employeeRoleTitle = document.getElementById('employee-role-title');
+        const employeeTable = document.getElementById('employee-table');
+        const closeEmployee = document.getElementById('closeEmployee');
+
+        // Fetch employee data from Firebase
+        get(ref(database, `employees/${role}`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                const employeeData = snapshot.val();
+
+                // Clear previous table data
+                employeeTable.innerHTML = '';
+
+                // Add fetched data to the table
+                // employeeData.forEach(employee => {
+                //     const row = document.createElement('tr');
+                //     row.innerHTML = `<td>${employee.name}</td><td>${employee.role}</td>`;
+                //     employeeTable.appendChild(row);
+                // });
+
+                Object.keys(employeeData).forEach(key => {
+                    const employee = employeeData[key];
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td>${employee.name}</td><td>${employee.role}</td>`;
+                    employeeTable.appendChild(row);
+                });
+
+                // Update the title with the selected role
+                const roleTitles = {
+                    admin: "Admin Employees",
+                    developer: "Developers",
+                    dbadmin: "DB Administrators",
+                    awsengineer: "AWS Engineers"
+                };
+                employeeRoleTitle.textContent = roleTitles[role];
+
+                // Show the employee details section and animate
+                employeeDetails.classList.add('active');
+
+            } else {
+    employeeTable.innerHTML = `
+        <tr>
+            <td colspan="2" style="text-align: center; color: red; font-size: 24px;">
+                No employees found
+            </td>
+        </tr>`;
+}
+
+        }).catch((error) => {
+            console.error("Error fetching data:", error);
+        });
+    }
+
+    // Close employee details (keep existing function)
+    function closeEmployeeDetails() {
+        const employeeDetails = document.getElementById('employee-details');
+        employeeDetails.classList.remove('active');
+        // Show the close button by changing its display property
+    closeEmployee.style.display = 'none';
+    }
+
+    // Make functions globally accessible
+    window.highlightCard = highlightCard;
+    window.toggleServerDetails = toggleServerDetails;
+    window.toggleEmployeeDetails = toggleEmployeeDetails;
+    window.closeEmployeeDetails = closeEmployeeDetails;
+</script>
+</body>
+</html>

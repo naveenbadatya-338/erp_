@@ -1,0 +1,119 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #006d8f; /* Lighter blue background */
+}
+
+/* Styles for index.html */
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: white; /* White color for title */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+main {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+    border-radius: 5px;
+    background: linear-gradient(to bottom right, #e0f7fa, #b2ebf2); /* Default Light Blue Gradient */
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    color: #34495e; /* Dark Gray */
+}
+
+select {
+    padding: 8px;
+    font-size: 16px;
+    background: linear-gradient(to right, #a5d6a7, #b2ebf2); /* Light Green & Light Blue */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Styles for client details */
+.client-details {
+    display: none; /* Start hidden */
+    width: 100%;
+}
+
+.client-logo {
+    display: block;
+    margin: 20px auto;
+    width: 200px; /* Fixed width */
+    height: auto;
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th {
+    padding: 10px;
+    border: 2px solid #2196f3; /* Thicker blue border for headers */
+    background-color: #f0f4c3; /* Light Yellow for headers */
+    color: #2c3e50; /* Dark Blue for headers */
+    font-size: 1.1em; /* Slightly larger font for headers */
+}
+
+td {
+    padding: 10px;
+    border: 1px solid #ccc; /* Light gray border for cells */
+    vertical-align: top;
+    color: #424242; /* Dark Gray for table values */
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: disc;
+    list-style-position: inside; /* Bullets inside the cell */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #e0e0e0; /* Light Gray on hover */
+}
+
+/* Multi-color gradient for client names */
+.client-details h2 {
+    background: linear-gradient(to right, #ff5722, #ffeb3b, #4caf50); /* Multi-color gradient */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles for environment sub-columns */
+th[colspan="2"] {
+    text-align: center;
+}
+
+td.prod-env {
+    border-right: 2px solid #ccc; /* Thicker border between prod and non-prod */
+    padding: 8px; /* Adjusted padding for a more balanced look */
+}
+
+td.non-prod-env {
+    background-color: #e8f5e9; /* Light green background for non-prod */
+    padding: 8px; /* Adjusted padding for consistency */
+}
+
+/* Additional styling for environment headers */
+th:nth-child(6), th:nth-child(7) {
+    text-align: center; /* Center-align environment sub-column headers */
+}
+

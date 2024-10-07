@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js" type="module"></script>
+    <style>
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        select, input, button {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        #addEmployeeForm {
+            margin-top: 20px;
+            display: none;
+        }
+        #addEmployeeForm.active {
+            display: block;
+        }
+    
+        .edit-mode input {
+            width: 90%;
+            padding: 5px;
+            margin: 2px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Employee Management System</h1>
+        
+        <select id="roleSelect" onchange="window.loadEmployees()">
+            <option value="">Select Role</option>
+            <option value="admin">PS Admin</option>
+            <option value="developer">PS Developer</option>
+            <option value="dbadmin">DB Administrator</option>
+            <option value="awsengineer">AWS Cloud Engineer</option>
+        </select>
+
+        <table id="employeeTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="employeeTableBody"></tbody>
+        </table>
+
+        <div class="action-buttons">
+            <button onclick="window.toggleAddEmployeeForm()">Add New Employee</button>
+        </div>
+
+        <div id="addEmployeeForm" style="display:none;">
+            <input type="text" id="newEmployeeName" placeholder="Employee Name">
+            <input type="text" id="newEmployeeRole" placeholder="Employee Role">
+            <button onclick="window.addEmployee()">Add Employee</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getDatabase, ref, get, set, remove, update } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBPPkzDt3cY3DT-sodGvu7uZy_is0GzrZc",
+            authDomain: "erp-employees-84883.firebaseapp.com",
+            databaseURL: "https://erp-employees-84883-default-rtdb.firebaseio.com",
+            projectId: "erp-employees-84883",
+            storageBucket: "erp-employees-84883.appspot.com",
+            messagingSenderId: "1076821963095",
+            appId: "1:1076821963095:web:8ae8d1f6ae4ba388894e12",
+            measurementId: "G-DK1B84SPWM"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        window.loadEmployees = function() {
+            const role = document.getElementById('roleSelect').value;
+            const employeeTableBody = document.getElementById('employeeTableBody');
+
+            console.log("Loading employees for role:", role);
+
+            get(ref(database, `employees/${role}`)).then((snapshot) => {
+                console.log("Snapshot:", snapshot.val());
+                if (snapshot.exists()) {
+                    const employeeData = snapshot.val();
+                    employeeTableBody.innerHTML = '';
+
+                    Object.keys(employeeData).forEach(key => {
+                        const employee = employeeData[key];
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${employee.name}</td>
+                            <td>${employee.role}</td>
+                            <td>
+                                <button onclick="window.editEmployee('${key}', '${employee.name}', '${employee.role}')">Edit</button>
+                                <button onclick="window.deleteEmployee('${key}')">Delete</button>
+                            </td>
+                        `;
+                        employeeTableBody.appendChild(row);
+                    });
+                } else {
+                    console.log("No data available for this role");
+                }
+            }).catch((error) => {
+                console.error("Error fetching data:", error);
+            });
+        }
+
+        window.toggleAddEmployeeForm = function() {
+            const addEmployeeForm = document.getElementById('addEmployeeForm');
+            addEmployeeForm.style.display = addEmployeeForm.style.display === 'none' ? 'block' : 'none';
+        }
+
+        window.addEmployee = function() {
+            const newEmployeeName = document.getElementById('newEmployeeName').value;
+            const newEmployeeRole = document.getElementById('newEmployeeRole').value;
+            const role = document.getElementById('roleSelect').value;
+
+            set(ref(database, `employees/${role}/${newEmployeeName}`), {
+                name: newEmployeeName,
+                role: newEmployeeRole
+            }).then(() => {
+                console.log("Employee added successfully");
+                window.loadEmployees();
+                window.toggleAddEmployeeForm();
+            }).catch((error) => {
+                console.error("Error adding employee:", error);
+            });
+        }
+
+        window.editEmployee = function(key, name, role) {
+            const row = document.querySelector(`tr[data-key="${key}"]`);
+            row.innerHTML = `
+                <td><input type="text" value="${name}" id="editName"></td>
+                <td><input type="text" value="${role}" id="editRole"></td>
+                <td>
+                    <button onclick="window.saveEmployee('${key}')">Save</button>
+                    <button onclick="window.cancelEdit()">Cancel</button>
+                </td>
+            `;
+            row.classList.add('edit-mode');
+        }
+
+        window.saveEmployee = function(key) {
+            const editName = document.getElementById('editName').value;
+            const editRole = document.getElementById('editRole').value;
+            const role = document.getElementById('roleSelect').value;
+
+            update(ref(database, `employees/${role}/${key}`), {
+                name: editName,
+                role: editRole
+            }).then(() => {
+                console.log("Employee updated successfully");
+                window.loadEmployees();
+            }).catch((error) => {
+                console.error("Error updating employee:", error);
+            });
+        }
+
+        window.cancelEdit = function() {
+            window.loadEmployees();
+        }
+
+        window.deleteEmployee = function(employeeName) {
+            const role = document.getElementById('roleSelect').value;
+
+            remove(ref(database, `employees/${role}/${employeeName}`)).then(() => {
+                console.log("Employee deleted successfully");
+                window.loadEmployees();
+            }).catch((error) => {
+                console.error("Error deleting employee:", error);
+            });
+        }
+    </script>
+</body>
+</html>

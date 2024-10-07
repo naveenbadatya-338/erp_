@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERPA</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f0f3f5;
+            --text-color: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+        }
+
+        nav {
+            background-color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 1rem;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a:hover, nav ul li a:focus {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        main {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .content.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 1568px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav ul li {
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ERPA</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#" data-content="clients">Clients</a></li>
+            <li><a href="#" data-content="inventory">Inventory</a></li>
+            <li><a href="#" data-content="pod-details">Pod Details</a></li>
+        </ul>
+    </nav>
+    <main>
+        <div id="content" class="content">
+            <!-- Content will be dynamically loaded here -->
+        </div>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const content = document.getElementById('content');
+            const navLinks = document.querySelectorAll('nav a');
+
+            function loadContent(section) {
+                content.classList.remove('active');
+                setTimeout(() => {
+                    switch(section) {
+                        case 'clients':
+                            content.innerHTML = '<h2>Clients</h2><p>Here you can find information about our clients.</p>';
+                            break;
+                        case 'inventory':
+                            content.innerHTML = '<h2>Inventory</h2><p>Check our current inventory status here.</p>';
+                            break;
+                        case 'pod-details':
+                            content.innerHTML = '<h2>Pod Details</h2><p>Detailed information about our pods.</p>';
+                            break;
+                        default:
+                            content.innerHTML = '<h2>Welcome to ERPA</h2><p>Please select a section from the navigation menu.</p>';
+                    }
+                    content.classList.add('active');
+                }, 300);
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const section = e.target.getAttribute('data-content');
+                    loadContent(section);
+                });
+            });
+
+            // Load default content
+            loadContent();
+        });
+    </script>
+</body>
+</html>

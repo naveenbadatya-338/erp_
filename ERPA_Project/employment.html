@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js" type="module"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        select, input, button {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Employee Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        /* Align buttons side by side */
+        .employee-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+        }
+
+        .modal-close {
+            cursor: pointer;
+            font-size: 24px;
+            color: #aaa;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            select, input, button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Employee Management System</h1>
+        <select id="roleSelect">
+            <option value="admin">PS Admin</option>
+            <option value="developer">PS Developer</option>
+            <option value="dbadmin">DB Administrator</option>
+            <option value="awsengineer">AWS Cloud Engineer</option>
+        </select>
+        <button onclick="loadEmployees()">Load Employees</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee Name</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="employeeList"></tbody>
+        </table>
+
+        <input type="text" id="newEmployeeName" placeholder="New Employee Name">
+        <input type="text" id="newEmployeeRole" placeholder="New Employee Role">
+        <button onclick="addEmployee()">Add Employee</button>
+
+        <!-- Modal for editing employee -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Edit Employee</h2>
+                    <span class="modal-close" onclick="closeModal()">&times;</span>
+                </div>
+                <input type="text" id="editEmployeeName" placeholder="Employee Name">
+                <input type="text" id="editEmployeeRole" placeholder="Employee Role">
+                <div class="error-message" id="editErrorMessage"></div>
+                <button onclick="saveEdit()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getDatabase, ref, get, set, remove, update } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBPPkzDt3cY3DT-sodGvu7uZy_is0GzrZc",
+            authDomain: "erp-employees-84883.firebaseapp.com",
+            databaseURL: "https://erp-employees-84883-default-rtdb.firebaseio.com",
+            projectId: "erp-employees-84883",
+            storageBucket: "erp-employees-84883.appspot.com",
+            messagingSenderId: "1076821963095",
+            appId: "1:1076821963095:web:8ae8d1f6ae4ba388894e12",
+            measurementId: "G-DK1B84SPWM"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        let editingEmployeeKey = null;
+
+        window.loadEmployees = function() {
+            const role = document.getElementById('roleSelect').value;
+            const employeeList = document.getElementById('employeeList');
+            employeeList.innerHTML = '';
+
+            get(ref(database, `employees/${role}`)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const employees = snapshot.val();
+                    Object.keys(employees).forEach((key) => {
+                        const emp = employees[key];
+                        employeeList.innerHTML += `
+                            <tr>
+                                <td>${emp.name}</td>
+                                <td>${emp.role}</td>
+                                <td class="employee-actions">
+                                    <button onclick="openEditModal('${key}', '${emp.name}', '${emp.role}')">Edit</button>
+                                    <button onclick="deleteEmployee('${key}')">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    employeeList.innerHTML = '<tr><td colspan="3">No employees found</td></tr>';
+                }
+            }).catch((error) => {
+                console.error("Error loading employees:", error);
+            });
+        }
+
+        window.addEmployee = function() {
+            const name = document.getElementById('newEmployeeName').value;
+            const role = document.getElementById('newEmployeeRole').value;
+            const roleSelect = document.getElementById('roleSelect').value;
+
+            if (name.trim() === '' || role.trim() === '') {
+                alert("Please fill out both fields.");
+                return;
+            }
+
+            set(ref(database, `employees/${roleSelect}/${Date.now()}`), {
+                name: name,
+                role: role
+            }).then(() => {
+                alert("Employee added successfully");
+                loadEmployees();
+            }).catch((error) => {
+                console.error("Error adding employee:", error);
+            });
+        }
+
+        window.openEditModal = function(key, name, role) {
+            editingEmployeeKey = key;
+            document.getElementById('editEmployeeName').value = name;
+            document.getElementById('editEmployeeRole').value = role;
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        window.closeModal = function() {
+            document.getElementById('editModal').style.display = 'none';
+            document.getElementById('editErrorMessage').innerText = '';
+        }
+
+        window.saveEdit = function() {
+            const name = document.getElementById('editEmployeeName').value;
+            const role = document.getElementById('editEmployeeRole').value;
+            const roleSelect = document.getElementById('roleSelect').value;
+
+            if (name.trim() === '' || role.trim() === '') {
+                document.getElementById('editErrorMessage').innerText = "Both fields are required.";
+                return;
+            }
+
+            update(ref(database, `employees/${roleSelect}/${editingEmployeeKey}`), {
+                name: name,
+                role: role
+            }).then(() => {
+                alert("Employee updated successfully");
+                closeModal();
+                loadEmployees();
+            }).catch((error) => {
+                console.error("Error updating employee:", error);
+            });
+        }
+
+        window.deleteEmployee = function(key) {
+            const roleSelect = document.getElementById('roleSelect').value;
+
+            remove(ref(database, `employees/${roleSelect}/${key}`)).then(() => {
+                alert("Employee deleted successfully");
+                loadEmployees();
+            }).catch((error) => {
+                console.error("Error deleting employee:", error);
+            });
+        }
+    </script> 
+</body>
+</html>

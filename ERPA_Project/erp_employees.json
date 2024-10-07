@@ -1,0 +1,30 @@
+{
+    "employees": {
+      "admin": [
+        {"name": "Alice Brown", "role": "System Administrator"},
+        {"name": "Charlie King", "role": "IT Manager"},
+        {"name": "Alice Brown", "role": "System Administrator"},
+        {"name": "Charlie King", "role": "IT Manager"},
+        {"name": "Alice Brown", "role": "System Administrator"},
+        {"name": "Charlie King", "role": "IT Manager"},
+        {"name": "Alice Brown", "role": "System Administrator"},
+        {"name": "Charlie King", "role": "IT Manager"},
+        {"name": "Alice Brown", "role": "System Administrator"},
+        {"name": "Charlie King", "role": "IT Manager"},
+        {"name": "Alice Brown", "role": "System Administrator"},
+        {"name": "Charlie King", "role": "IT Manager"}
+      ],
+      "developer": [
+        {"name": "John Doe", "role": "Backend Developer"},
+        {"name": "Jane Smith", "role": "Frontend Developer"}
+      ],
+      "dbadmin": [
+        {"name": "Bob Johnson", "role": "Database Administrator"},
+        {"name": "Eva Green", "role": "Senior DBA"}
+      ],
+      "awsengineer": [
+        {"name": "Mike Ross", "role": "AWS Cloud Architect"},
+        {"name": "Sarah Palmer", "role": "DevOps Engineer"}
+      ]
+    }
+  }

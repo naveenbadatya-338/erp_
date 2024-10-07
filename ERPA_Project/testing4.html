@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERPA Client Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="testing4.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="testing4.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM0aMOfH5nq6ZZ/tzRx+HicD78mGq2kD3xV6Zq" crossorigin="anonymous">
+<style>
+</style>
+</head>
+<body>
+    <!-- <header>
+        <h1>ERPA Client Details</h1>
+        <i class="material-icons">home</i>
+    </header> -->
+    <header>
+        <div class="header-container">
+            <h1>ERPA Client Details</h1>
+            <i class="material-icons home-icon">home</i>
+        </div>
+    </header>
+    
+    <div class="tab">
+        
+        <button class="tablinks" onclick="openTab(event, 'Clients')" id="defaultOpen" >Clients</button>
+        <div class="dropdown">
+            <button class="tablinks">Inventory</button>
+            <div class="dropdown-content">
+                <a href="#" onclick="openTab(event, 'FSCJ_Inventory')">FSCJ</a>
+                <a href="#" onclick="openTab(event, 'ALASU_Inventory')">ALASU</a>
+            </div>
+        </div>
+        <button class="tablinks" onclick="openTab(event, 'pod')">Pod Info</button>
+        <button class="tablinks" onclick="openTab(event,'tab3')">Tab 3</button>
+    </div>
+    <main>
+        <div id="Clients" class="tabcontent">
+            <button class="client-button" onclick="showClientDetails('fscj')">Florida State College at Jacksonville (FSCJ)</button>
+            <button class="client-button" onclick="showClientDetails('alasu')">Alabama State University (ALASU)</button>
+
+            <div id="fscjDetails" class="client-details" style="font-weight: bold; font-size: large;">
+                <h2 style="display: flex; justify-content: space-between; align-items: center;">
+                    Florida State College at Jacksonville (FSCJ)
+                    <button class="inventoryButton">Inventory</button>
+                </h2>
+                <img src="/images/fscj.png" alt="FSCJ Logo" class="client-logo">
+                <!-- Added Time Zone and Current Time -->
+                <div class="time-info">
+                    <strong>Time Zone:</strong> <span>Indian Standard Time (IST)</span><br>
+                    <strong>Current Time:</strong> <span class="current-time">--:--:--</span>
+                </div>
+                <table>
+                  <tr>
+                    <th>Applications</th>
+                    <th>Image Level</th>
+                    <th>Tools Version</th>
+                    <th>Application URL</th>
+                    <th colspan="2">Environments</th>
+                  </tr>
+                  <tr>
+                    <td>FSCM</td>
+                    <td>49</td>
+                    <td>8.60.11</td>
+                    <td><a href="http://fscm.domain.com:8000" target="_blank">http://fscm.domain.com:8000</a></td>
+                    <td class="prod-env">
+                      <ul>
+                        <li>fsprd</li>
+                      </ul>
+                    </td>
+                    <td class="non-prod-env">
+                      <ul>
+                        <li>fsdmo</li>
+                        <li>fsdev1</li>
+                        <li>fsQA1</li>
+                        <li>fsTRN</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>HCM</td>
+                    <td>49</td>
+                    <td>8.60.11</td>
+                    <td><a href="http://hcm.domain.com:8000" target="_blank">http://hcm.domain.com:8000</a></td>
+                    <td class="prod-env">
+                      <ul>
+                        <li>hcprd</li>
+                      </ul>
+                    </td>
+                    <td class="non-prod-env">
+                      <ul>
+                        <li>hcdmo</li>
+                        <li>hcdev1</li>
+                        <li>hcQA1</li>
+                        <li>hcQA2</li>
+                        <li>hcTRN</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>CS</td>
+                    <td>32</td>
+                    <td>8.60.11</td>
+                    <td><a href="http://cs.domain.com:8000" target="_blank">http://cs.domain.com:8000</a></td>
+                    <td class="prod-env">
+                      <ul>
+                        <li>csprd</li>
+                      </ul>
+                    </td>
+                    <td class="non-prod-env">
+                      <ul>
+                        <li>csdmo</li>
+                        <li>csdev1</li>
+                        <li>csQA1</li>
+                        <li>csQA2</li>
+                        <li>csTRN</li>
+                      </ul>
+                    </td>
+                  </tr>
+                </table>
+            </div>
+            <div id="alasuDetails" class="client-details">
+                <h2 style="display: flex; justify-content: space-between; align-items: center;">
+                Alabama State University (ALASU)
+                <button class="inventoryButton">Inventory</button>
+                </h2>
+                <img src="/images/alasu.png" alt="ALASU Logo" class="client-logo">
+                <!-- Added Time Zone and Current Time -->
+                <div class="time-info">
+                    <strong>Time Zone:</strong> <span>Indian Standard Time (IST)</span><br>
+                    <strong>Current Time:</strong> <span class="current-time">--:--:--</span>
+                </div>
+                <table>
+                  <tr>
+                    <th>Applications</th>
+                    <th>Image Level</th>
+                    <th>Tools Version</th>
+                    <th>Application URL</th>
+                    <th colspan="2">Environments</th>
+                  </tr>
+                  <tr>
+                    <td>FSCM</td>
+                    <td>51</td>
+                    <td>8.59.18</td>
+                    <td><a href="http://fscm.alasu.domain.com:8000" target="_blank">http://fscm.alasu.domain.com:8000</a></td>
+                    <td class="prod-env">
+                      <ul>
+                        <li>fsprod</li>
+                      </ul>
+                    </td>
+                    <td class="non-prod-env">
+                      <ul>
+                        <li>fsdmo</li>
+                        <li>fsdev</li>
+                        <li>fstest</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>HCM</td>
+                    <td>47</td>
+                    <td>8.59.18</td><td><a href="http://hcm.alasu.domain.com:8000" target="_blank">http://hcm.alasu.domain.com:8000</a></td>
+                    <td class="prod-env">
+                      <ul>
+                        <li>hcprod</li>
+                      </ul>
+                    </td>
+                    <td class="non-prod-env">
+                      <ul>
+                        <li>hcdmo</li>
+                        <li>hcdev</li>
+                        <li>hctest</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>CS</td>
+                    <td>32</td>
+                    <td>8.59.18</td>
+                    <td><a href="http://cs.alasu.domain.com:8000" target="_blank">http://cs.alasu.domain.com:8000</a></td>
+                    <td class="prod-env">
+                      <ul>
+                        <li>csprod</li>
+                      </ul>
+                    </td>
+                    <td class="non-prod-env">
+                      <ul>
+                        <li>csdmo</li>
+                        <li>csdev</li>
+                        <li>cstest</li>
+                      </ul>
+                    </td>
+                  </tr>
+                </table>
+                
+                
+            </div>
+        </div>
+
+        <div id="pod" class="tabcontent">
+          <h1 style="color: #0056b3;">Pod Details</h1>
+   
+          <div class="pod" onclick="showPodMembers('pod1')">Pod 1</div>
+          <div id="pod1-members" class="members">
+              <div class="member-container" onclick="showMemberDetails(event, 'member1')">
+                  <div class="member">Member 1</div>
+                  <div id="member1-details" class="details">
+                      <div><strong>Name:</strong> John Doe</div>
+                      <div><strong>Age:</strong> 30</div>
+                      <div><strong>Phone Number:</strong> (123) 456-7890</div>
+                      <div><strong>Client:</strong> <a href="client-acme.html" class="client-link">Acme Corp</a></div>
+                      <div><strong>City:</strong> New York</div>
+                      <div><strong>Pincode:</strong> 10001</div>
+                  </div>
+              </div>
+              <div class="member-container" onclick="showMemberDetails(event, 'member2')">
+                  <div class="member">Member 2</div>
+                  <div id="member2-details" class="details">
+                      <div><strong>Name:</strong> Jane Smith</div>
+                      <div><strong>Age:</strong> 28</div>
+                      <div><strong>Phone Number:</strong> (987) 654-3210</div>
+                      <div><strong>Client:</strong> <a href="client-xyz.html" class="client-link">XYZ Ltd</a></div>
+                      <div><strong>City:</strong> Los Angeles</div>
+                      <div><strong>Pincode:</strong> 90001</div>
+                  </div>
+              </div>
+          </div>
+       
+          <div class="pod" onclick="showPodMembers('pod2')">Pod 2</div>
+          <div id="pod2-members" class="members">
+              <div class="member-container" onclick="showMemberDetails(event, 'member3')">
+                  <div class="member">Member 3</div>
+                  <div id="member3-details" class="details">
+                      <div><strong>Name:</strong> Alex Johnson</div>
+                      <div><strong>Age:</strong> 35</div>
+                      <div><strong>Phone Number:</strong> (555) 123-4567</div>
+                      <div><strong>Client:</strong> <a href="client-abc.html" class="client-link">ABC Inc</a></div>
+                      <div><strong>City:</strong> Chicago</div>
+                      <div><strong>Pincode:</strong> 60601</div>
+                  </div>
+              </div>
+              <div class="member-container" onclick="showMemberDetails(event, 'member4')">
+                  <div class="member">Member 4</div>
+                  <div id="member4-details" class="details">
+                      <div><strong>Name:</strong> Emily Davis</div>
+                      <div><strong>Age:</strong> 32</div>
+                      <div><strong>Phone Number:</strong> (444) 987-6543</div>
+                      <div><strong>Client:</strong> <a href="client-global.html" class="client-link">Global Solutions</a></div>
+                      <div><strong>City:</strong> San Francisco</div>
+                      <div><strong>Pincode:</strong> 94101</div>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+        <div id="tab3" class="tabcontent">
+            <h2>Tab 3 Content</h2>
+            <p>This is the content for Tab 3. You can add your desired content here.</p>
+        </div>
+        <div id="inventory" class="tabcontent">
+            <h2>Inventory related tab</h2>
+            <p>tab related to inventory</p>
+        </div>
+    </main>
+</body>
+</html>

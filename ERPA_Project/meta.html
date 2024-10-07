@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- CSS for styles -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f9fd; /* Light blue background */
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #003366; /* Dark blue */
+            padding: 1rem;
+            color: #fff;
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            margin: 0;
+        }
+
+        .navbar nav a {
+            color: white;
+            margin-left: 15px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .navbar nav a:hover {
+            color: #cce0ff;
+        }
+
+        /* Main container */
+        .container {
+            padding: 2rem;
+        }
+
+        .section-header {
+            margin-bottom: 1.5rem;
+            color: #003366;
+            font-weight: 600;
+        }
+
+        /* Card style */
+        .card {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.6s forwards;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Background Colors for Cards */
+        .card.servers { background-color: #e0f7fa; } /* Light cyan */
+        .card.projects { background-color: #e6ffe6; } /* Light green */
+        .card.employees { background-color: #fff3e0; } /* Light peach */
+        .card.maintenance { background-color: #f0f0f0; } /* Light grey */
+        .card.vpn { background-color: #ccffcc; } /* Pastel green */
+        .card.aws { background-color: #ffe6ff; } /* Pastel pink */
+        .card h3 {
+            margin-top: 0;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+            background-color: white;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #003366;
+            color: #fff;
+        }
+
+        /* Button styles */
+        .btn {
+            padding: 10px 20px;
+            color: white;
+            background-color: #003366;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #002244;
+            transform: scale(1.05);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        /* Updated modal content for server details */
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 60%; /* Increased width */
+            height: 50%; /* Decreased height */
+            max-width: 800px;
+            max-height: 400px;
+            overflow-y: auto; /* Enable scrolling if content overflows */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+        }
+
+        .modal-close {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #003366;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #ff6666;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .card {
+                padding: 15px;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            .btn {
+                padding: 8px 16px;
+            }
+
+            .modal-content {
+                width: 80%;
+                height: 60%;
+                max-width: 600px;
+                max-height: 300px;
+            }
+        }
+
+        /* Slide-in animation */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Quick Links */
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            background-color: black;
+        }
+
+        .quick-links a {
+            margin: 0 10px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .quick-links a:hover {
+            color: #cce0ff;
+        }
+
+        /* Overflow scrollbar for modal */
+        .modal-content {
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <h2>Inventory Management Dashboard</h2>
+        <nav>
+            <a href="#">Servers</a>
+            <a href="#">Projects</a>
+            <a href="#">Employees</a>
+        </nav>
+        
+    </div>
+    
+    <!-- Quick Links -->
+    <div class="quick-links">
+        <a href="#maintenance-window">Maintenance Window</a>
+        <a href="#vpn-details">VPN Details</a>
+        <a href="#aws-console-link">AWS Console Link</a>
+        <a href="#number-of-servers">Number of Servers</a>
+        <a href="#current-projects">Current Projects</a>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Maintenance Window -->
+        <div class="card maintenance" id="maintenance-window">
+            <h3 class="section-header">Maintenance Window</h3>
+            <p>Scheduled maintenance windows for different servers:</p>
+            <table>
+                <tr>
+                    <th>Server Name</th>
+                    <th>Maintenance Start</th>
+                    <th>Maintenance End</th>
+                </tr>
+                <tr>
+                    <td>Server A</td>
+                    <td>2024-09-30 01:00 AM</td>
+                    <td>2024-09-30 03:00 AM</td>
+                </tr>
+                <tr>
+                    <td>Server B</td>
+                    <td>2024-10-05 11:00 PM</td>
+                    <td>2024-10-06 01:00 AM</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- VPN Details -->
+        <div class="card vpn" id="vpn-details">
+            <h3 class="section-header">VPN Details</h3>
+            <p>Client VPN Information:</p>
+            <table>
+                <tr>
+                    <th>VPN Provider</th>
+                    <th>Download Link</th>
+                </tr>
+                <tr>
+                    <td>ExpressVPN</td>
+                    <td><a href="https://www.expressvpn.com/download" target="_blank">Download</a></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- AWS Console Link -->
+        <div class="card aws" id="aws-console-link">
+            <h3 class="section-header">AWS Console Link</h3>
+            <p>Client AWS Console Access:</p>
+            <a href="https://console.aws.amazon.com/" target="_blank" class="btn">Access AWS Console</a>
+        </div>
+
+        <!-- Servers Section -->
+        <div class="card servers" id="number-of-servers">
+            <h3 class="section-header">Servers</h3>
+            <p>Click below to view server details:</p>
+            <button class="btn" onclick="showServerModal()">View Servers</button>
+            <!-- Server details will be shown in modal -->
+        </div>
+
+        <!-- Projects Section -->
+        <div class="card projects" id="current-projects">
+            <h3 class="section-header">Projects</h3>
+            <p>Current projects:</p>
+            <table>
+                <tr>
+                    <th>Project Name</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>Project Alpha</td>
+                    <td>Ongoing</td>
+                </tr>
+                <tr>
+                    <td>Project Beta</td>
+                    <td>Completed</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Employees Card -->
+        <div class="card employees" id="employees-section">
+            <h3 class="section-header">Employees</h3>
+            <p>Click to view details of employees based on their role:</p>
+            <button class="btn" onclick="showEmployeeModal('admin')">Admin</button>
+            <button class="btn" onclick="showEmployeeModal('developer')">Developer</button>
+        </div>
+    </div>
+
+    <!-- Modals for viewing details -->
+
+    <!-- Modal for Servers -->
+    <div id="serverModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Servers</h3>
+                <span class="modal-close" onclick="closeServerModal()">×</span>
+            </div>
+            <table>
+                <tr>
+                    <th>Server Name</th>
+                    <th>IP Address</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>Server A</td>
+                    <td>192.168.1.1</td>
+                    <td>Active</td>
+                </tr>
+                <tr>
+                    <td>Server B</td>
+                    <td>192.168.1.2</td>
+                    <td>Active</td>
+                </tr>
+                <tr>
+                    <td>Server C</td>
+                    <td>192.168.1.3</td>
+                    <td>Inactive</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal for Employee Details -->
+    <div id="employeeRoleModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Employees - <span id="employeeRole"></span></h3>
+                <span class="modal-close" onclick="closeEmployeeModal()">×</span>
+            </div>
+            <table id="employeeRoleTable">
+                <!-- Employee details will be dynamically added here -->
+            </table>
+        </div>
+    </div>
+
+    <!-- JS for Modals and Dynamic Content -->
+    <script>
+        // Function to show server modal
+        function showServerModal() {
+            const modal = document.getElementById('serverModal');
+            modal.style.display = 'flex';
+        }
+
+        // Function to close server modal
+        function closeServerModal() {
+            const modal = document.getElementById('serverModal');
+            modal.style.display = 'none';
+        }
+
+        // Employee details by role
+        const employeeRoles = {
+            admin: [
+                { name: 'Alice Brown', role: 'System Administrator' },
+                { name: 'Charlie King', role: 'IT Manager' }
+            ],
+            developer: [
+                { name: 'John Doe', role: 'Backend Developer' },
+                { name: 'Jane Smith', role: 'Frontend Developer' }
+            ]
+        };
+
+        // Function to show employee modal by role
+        function showEmployeeModal(role) {
+            const modal = document.getElementById('employeeRoleModal');
+            const roleTitle = document.getElementById('employeeRole');
+            const employeeTable = document.getElementById('employeeRoleTable');
+
+            // Set the role name in the modal header
+            roleTitle.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+
+            // Clear previous employee rows
+            employeeTable.innerHTML = `
+                <tr>
+                    <th>Employee Name</th>
+                    <th>Role</th>
+                </tr>
+            `;
+
+            // Populate employee details for the selected role
+            employeeRoles[role].forEach(employee => {
+                const row = `<tr><td>${employee.name}</td><td>${employee.role}</td></tr>`;
+                employeeTable.innerHTML += row;
+            });
+
+            // Show the modal
+            modal.style.display = 'flex';
+        }
+
+        // Function to close the employee modal
+        function closeEmployeeModal() {
+            const modal = document.getElementById('employeeRoleModal');
+            modal.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

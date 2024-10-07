@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management Dashboard</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f9fd;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .navbar {
+            background-color: #003366;
+            padding: 1rem;
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar h2 {
+            margin: 0;
+        }
+        
+        .navbar nav a {
+            color: white;
+            margin-left: 15px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease-in-out;
+        }
+        
+        .navbar nav a:hover {
+            color: #cce0ff;
+        }
+        
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            position: sticky;
+            top: 70px; /* height of navbar */
+            background-color: #ffffff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 100; /* below navbar */
+        }
+        
+        .quick-links a {
+            margin: 0 10px;
+            color: #003366;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease-in-out;
+        }
+        
+        .quick-links a:hover {
+            color: #cce0ff;
+        }
+        
+        .container {
+            padding: 2rem;
+        }
+        
+        .section-header {
+            margin-bottom: 1.5rem;
+            color: #003366;
+            font-weight: 600;
+        }
+        
+        .card {
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.6s forwards;
+            border: 1.5px solid rgb(0, 0, 0);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card.servers {
+            background-color: #e0f7fa;
+            background-image: url(/images/SERVERS.jfif);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: right;
+            color: #cce0ff;
+        }
+        
+        .card.employees {
+            background-color: #fff3e0;
+            background-image: url(https://kloverharris.com/wp-content/uploads/2022/04/Image-Insperity.png);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: right;
+        }
+        
+        .card.vpn {
+            background-color: #ccffcc;
+            background-image: url(https://img.freepik.com/free-vector/isometric-gradient-vpn-illustration_23-2149238128.jpg?size=338&ext=jpg&ga=GA1.1.1137601271.1727707830&semt=ais_hybrid);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: right;
+        }
+        
+        .card.aws {
+            background-color: rgb(98, 189, 235);
+            /* background-image: url(/images/shared image.jfif); */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .card h3 {
+            margin-top: 0;
+        }
+        
+        .card p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .card a {
+            color: #003366;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease-in-out;
+        }
+        
+        .card a:hover {
+            color: #cce0ff;
+        }
+        
+        @keyframes slideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>Inventory Management Dashboard</h2>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </nav>
+    </div>
+    <div class="quick-links">
+        <a href="#">Quick Link 1</a>
+        <a href="#">Quick Link 2</a>
+        <a href="#">Quick Link 3</a>
+    </div>
+    <div class="container">
+        <h1 class="section-header">Inventory Management Dashboard</h1>
+        <div class="card servers">
+            <h3>Servers</h3>
+            <p>Manage your servers and keep track of their status.</p>
+            <a href="#">View Servers</a>
+        </div>
+        <div class="card employees">
+            <h3>Employees</h3>
+            <p>Manage your employees and keep track of their information.</p>
+            <a href="#">View Employees</a>
+        </div>
+        <div class="card vpn">
+            <h3>VPN</h3>
+            <p>Manage your VPN connections and keep track of their status.</p>
+            <a href="#">View VPN</a>
+        </div>
+        <div class="card aws">
+            <h3>AWS</h3>
+            <p>Manage your AWS resources and keep track of their status.</p>
+            <a href="#">View AWS</a>
+        </div>
+    </div>
+</body>
+</html>
